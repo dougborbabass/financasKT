@@ -17,7 +17,7 @@
             android:layout_height="80dp"
             android:orientation="horizontal">
 
-            <ImageView android:id="@+id/transacao_icone"
+            <ImageView android:id="@+id/transact_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
@@ -31,7 +31,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/transacao_categoria"
+                    android:id="@+id/transact_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -41,7 +41,7 @@
                     tools:text="quinzecaracteres.." />
 
                 <TextView
-                    android:id="@+id/transacao_data"
+                    android:id="@+id/transact_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -50,7 +50,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/transacao_valor"
+                android:id="@+id/transact_value"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="10dp"
