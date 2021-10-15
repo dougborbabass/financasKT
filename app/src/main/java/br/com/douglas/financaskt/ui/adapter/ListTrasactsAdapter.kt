@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import androidx.core.content.ContextCompat
 import br.com.douglas.financaskt.R
-import br.com.douglas.financaskt.extension.formateToBr
+import br.com.douglas.financaskt.extension.formatToBr
+import br.com.douglas.financaskt.extension.limitOf
 import br.com.douglas.financaskt.model.Transact
 import br.com.douglas.financaskt.model.Type
 import kotlinx.android.synthetic.main.transact_item.view.*
@@ -16,6 +17,8 @@ class ListTrasactsAdapter(
     private val transacts: List<Transact>,
     private val context: Context
 ) : BaseAdapter() {
+
+    private val limitOfCategory = 14
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val viewCreate = LayoutInflater.from(context).inflate(R.layout.transact_item, parent, false)
@@ -30,9 +33,9 @@ class ListTrasactsAdapter(
             viewCreate.transact_icon.setBackgroundResource(R.drawable.icone_transacao_item_despesa)
         }
 
-        viewCreate.transact_value.text = transact.value.toString()
-        viewCreate.transact_category.text = transact.category
-        viewCreate.transact_date.text = transact.date.formateToBr()
+        viewCreate.transact_value.text = transact.value.formatToBr()
+        viewCreate.transact_category.text = transact.category.limitOf(limitOfCategory)
+        viewCreate.transact_date.text = transact.date.formatToBr()
 
         return viewCreate
     }
