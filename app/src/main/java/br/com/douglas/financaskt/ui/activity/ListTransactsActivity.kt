@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.com.douglas.financaskt.R
 import br.com.douglas.financaskt.model.Transact
+import br.com.douglas.financaskt.model.Type
 import br.com.douglas.financaskt.ui.adapter.ListTrasactsAdapter
 import kotlinx.android.synthetic.main.activity_list_transacts.*
 import java.math.BigDecimal
@@ -18,9 +19,9 @@ class ListTransactsActivity : AppCompatActivity() {
 
         val transacts = listOf(
             Transact(BigDecimal(20.5),
-            "Comida", Calendar.getInstance()),
+            "Comida", Type.EXPENSE),
             Transact(BigDecimal(100.0),
-                "Economia", Calendar.getInstance()))
+                "Economia", Type.REVENUE))
 
         list_transacts_listview.adapter = ListTrasactsAdapter(transacts, this)
 
