@@ -15,26 +15,37 @@ class ResumeView(private val context: Context,
                  transacts: List<Transact>) {
 
     private val resume: Resume = Resume(transacts)
+    private val colorExpanse = ContextCompat.getColor(context, R.color.despesa)
+    private val colorRevenue = ContextCompat.getColor(context, R.color.receita)
 
     fun addRevenueResume() {
         val totalRevenue = resume.revenue()
-        view.resume_card_revenue.setTextColor(ContextCompat.getColor(context, R.color.receita))
-        view.resume_card_revenue.text = totalRevenue.formatToBr()
+        with(view.resume_card_revenue) {
+            setTextColor(colorRevenue)
+            text = totalRevenue.formatToBr()
+        }
     }
 
     fun addExpenseResume() {
         val totalExpense = resume.expense()
-        view.resume_card_expense.setTextColor(ContextCompat.getColor(context, R.color.despesa))
-        view.resume_card_expense.text = totalExpense.formatToBr()
+        with(view.resume_card_expense) {
+            setTextColor(colorExpanse)
+            text = totalExpense.formatToBr()
+        }
     }
 
     fun addTotalResume() {
         val total = resume.total()
-        if (total >= BigDecimal.ZERO) {
-            view.resume_card_total.setTextColor((ContextCompat.getColor(context, R.color.receita)))
-        } else {
-            view.resume_card_total.setTextColor((ContextCompat.getColor(context, R.color.despesa)))
+        val color = colorBy(total)
+        with(view.resume_card_total) {
+            setTextColor(color)
+            text = total.formatToBr()
         }
-        view.resume_card_total.text = total.formatToBr()
+    }
+
+    private fun colorBy(total: BigDecimal) = if (total >= BigDecimal.ZERO) {
+        colorRevenue
+    } else {
+        colorExpanse
     }
 }
