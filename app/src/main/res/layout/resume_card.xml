@@ -43,7 +43,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/resumo_card_receita"
+                android:id="@+id/resume_card_revenue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -51,7 +51,7 @@
                 tools:text="R$ 1000000,00" />
 
             <TextView
-                android:id="@+id/resumo_card_despesa"
+                android:id="@+id/resume_card_expense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -65,7 +65,7 @@
                 android:background="#848484" />
 
             <TextView
-                android:id="@+id/resumo_card_total"
+                android:id="@+id/resume_card_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
