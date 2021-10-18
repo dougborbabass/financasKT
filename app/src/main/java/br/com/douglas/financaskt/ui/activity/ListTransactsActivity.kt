@@ -22,9 +22,7 @@ class ListTransactsActivity : AppCompatActivity() {
     private fun configureResume(transacts: List<Transact>) {
         val view = window.decorView
         val resumeView = ResumeView(this, view, transacts)
-        resumeView.addRevenueResume()
-        resumeView.addExpenseResume()
-        resumeView.addTotalResume()
+        resumeView.refresh()
     }
 
     private fun configureList(transacts: List<Transact>) {

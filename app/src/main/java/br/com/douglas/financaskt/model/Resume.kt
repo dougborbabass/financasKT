@@ -5,23 +5,21 @@ import java.math.BigDecimal
 class Resume(private val transacts: List<Transact>) {
 
     fun revenue(): BigDecimal {
-        var totalRevenue = BigDecimal.ZERO
-        for (transact in transacts) {
-            if (transact.type == Type.REVENUE) {
-                totalRevenue = totalRevenue.plus(transact.value)
-            }
-        }
-        return totalRevenue
+
+        val sumRevenue = transacts
+                .filter{ transact -> transact.type == Type.REVENUE }
+                .sumByDouble { transact -> transact.value.toDouble() }
+
+        return BigDecimal(sumRevenue)
     }
 
     fun expense(): BigDecimal {
-        var totalExpense = BigDecimal.ZERO
-        for (transact in transacts) {
-            if (transact.type == Type.EXPENSE) {
-                totalExpense = totalExpense.plus(transact.value)
-            }
-        }
-        return totalExpense
+
+        val sumExpanse = transacts
+                .filter{ transact -> transact.type == Type.EXPENSE}
+                .sumByDouble { transact -> transact.value.toDouble() }
+
+        return BigDecimal(sumExpanse)
     }
 
     fun total(): BigDecimal {

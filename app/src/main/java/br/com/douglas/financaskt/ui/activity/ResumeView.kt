@@ -18,7 +18,13 @@ class ResumeView(private val context: Context,
     private val colorExpanse = ContextCompat.getColor(context, R.color.despesa)
     private val colorRevenue = ContextCompat.getColor(context, R.color.receita)
 
-    fun addRevenueResume() {
+    fun refresh() {
+        addRevenueResume()
+        addExpenseResume()
+        addTotalResume()
+    }
+
+    private fun addRevenueResume() {
         val totalRevenue = resume.revenue()
         with(view.resume_card_revenue) {
             setTextColor(colorRevenue)
@@ -26,7 +32,7 @@ class ResumeView(private val context: Context,
         }
     }
 
-    fun addExpenseResume() {
+    private fun addExpenseResume() {
         val totalExpense = resume.expense()
         with(view.resume_card_expense) {
             setTextColor(colorExpanse)
@@ -34,7 +40,7 @@ class ResumeView(private val context: Context,
         }
     }
 
-    fun addTotalResume() {
+    private fun addTotalResume() {
         val total = resume.total()
         val color = colorBy(total)
         with(view.resume_card_total) {
