@@ -13,7 +13,7 @@
         android:layout_marginTop="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/form_transacao_valor"
+            android:id="@+id/form_transact_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/valor"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/form_transacao_data"
+            android:id="@+id/form_transact_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
@@ -46,7 +46,7 @@
         android:textSize="12dp" />
 
     <Spinner
-        android:id="@+id/form_transacao_categoria"
+        android:id="@+id/form_transact_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

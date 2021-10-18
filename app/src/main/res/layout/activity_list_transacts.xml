@@ -25,7 +25,7 @@
     </LinearLayout>
 
     <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/lista_transacoes_adiciona_menu"
+        android:id="@+id/list_transacts_add_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
@@ -44,7 +44,7 @@
 
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/lista_transacoes_adiciona_receita"
+            android:id="@+id/list_transacts_add_revenue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_top_right_white_24dp"
@@ -55,7 +55,7 @@
             fab:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/lista_transacoes_adiciona_despesa"
+            android:id="@+id/list_transacts_add_expanse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_bottom_left_white_24dp"
