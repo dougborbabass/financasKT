@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.douglas.financaskt.R
 import br.com.douglas.financaskt.delegate.TransactDelegate
 import br.com.douglas.financaskt.model.Transact
+import br.com.douglas.financaskt.model.Type
 import br.com.douglas.financaskt.ui.adapter.ListTrasactsAdapter
 import br.com.douglas.financaskt.ui.dialog.AddTransactDialog
 import kotlinx.android.synthetic.main.activity_list_transacts.*
@@ -24,7 +25,18 @@ class ListTransactsActivity : AppCompatActivity() {
         list_transacts_add_revenue
                 .setOnClickListener {
                     AddTransactDialog(window.decorView as ViewGroup, this)
-                            .configureDialog(object : TransactDelegate {
+                            .configureDialog(Type.REVENUE, object : TransactDelegate {
+                                override fun delegate(transact: Transact) {
+                                    refreshTransacts(transact)
+                                    list_transacts_add_menu.close(true)
+                                }
+                            })
+                }
+
+        list_transacts_add_expanse
+                .setOnClickListener {
+                    AddTransactDialog(window.decorView as ViewGroup, this)
+                            .configureDialog(Type.EXPENSE, object : TransactDelegate {
                                 override fun delegate(transact: Transact) {
                                     refreshTransacts(transact)
                                     list_transacts_add_menu.close(true)

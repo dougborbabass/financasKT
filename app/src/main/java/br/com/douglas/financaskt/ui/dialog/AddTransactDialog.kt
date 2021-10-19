@@ -24,15 +24,22 @@ class AddTransactDialog(private val viewGroup: ViewGroup,
 
     private val viewCreated = createLayout()
 
-    fun configureDialog(transactDelegate: TransactDelegate) {
+    fun configureDialog(type: Type, transactDelegate: TransactDelegate) {
         configureFieldDate()
-        configureFielCategory()
-        configureForm(transactDelegate)
+        configureFielCategory(type)
+        configureForm(type, transactDelegate)
     }
 
-    private fun configureForm(transactDelegate: TransactDelegate) {
+    private fun configureForm(type: Type, transactDelegate: TransactDelegate) {
+
+        val title = if(type == Type.REVENUE) {
+            R.string.adiciona_receita
+        } else {
+            R.string.adiciona_despesa
+        }
+
         AlertDialog.Builder(context)
-                .setTitle(R.string.adiciona_receita)
+                .setTitle(title)
                 .setView(viewCreated)
                 .setPositiveButton("Add", DialogInterface.OnClickListener
                 { _, _ ->
@@ -45,13 +52,10 @@ class AddTransactDialog(private val viewGroup: ViewGroup,
                     val date = dateInText.convertToCalendar()
 
                     val transactCreated = Transact(
-                            type = Type.REVENUE,
+                            type = type,
                             value = value,
                             date = date,
                             category = categoryInText)
-
-//                    refreshTransacts(transactCreated)
-//                    list_transacts_add_menu.close(true)
 
                     transactDelegate.delegate(transactCreated)
 
@@ -69,11 +73,17 @@ class AddTransactDialog(private val viewGroup: ViewGroup,
         }
     }
 
-    private fun configureFielCategory() {
-        // chamando spinner de categoria de receitas
+    private fun configureFielCategory(type: Type) {
+
+        val categories = if(type == Type.REVENUE) {
+            R.array.categorias_de_receita
+        } else {
+            R.array.categorias_de_despesa
+        }
+
         val adapter = ArrayAdapter
                 .createFromResource(context,
-                        R.array.categorias_de_receita, android.R.layout.simple_spinner_dropdown_item)
+                        categories, android.R.layout.simple_spinner_dropdown_item)
 
         viewCreated.form_transact_category.adapter = adapter
     }
