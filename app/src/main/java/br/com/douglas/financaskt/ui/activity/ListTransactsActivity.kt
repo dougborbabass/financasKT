@@ -21,28 +21,29 @@ class ListTransactsActivity : AppCompatActivity() {
 
         configureResume()
         configureList()
+        configureFab()
+    }
 
+    private fun configureFab() {
         list_transacts_add_revenue
-                .setOnClickListener {
-                    AddTransactDialog(window.decorView as ViewGroup, this)
-                            .configureDialog(Type.REVENUE, object : TransactDelegate {
-                                override fun delegate(transact: Transact) {
-                                    refreshTransacts(transact)
-                                    list_transacts_add_menu.close(true)
-                                }
-                            })
-                }
+            .setOnClickListener {
+                callDialogOfAdd(Type.REVENUE)
+            }
 
         list_transacts_add_expanse
-                .setOnClickListener {
-                    AddTransactDialog(window.decorView as ViewGroup, this)
-                            .configureDialog(Type.EXPENSE, object : TransactDelegate {
-                                override fun delegate(transact: Transact) {
-                                    refreshTransacts(transact)
-                                    list_transacts_add_menu.close(true)
-                                }
-                            })
+            .setOnClickListener {
+                callDialogOfAdd(Type.EXPENSE)
+            }
+    }
+
+    private fun callDialogOfAdd(type: Type) {
+        AddTransactDialog(window.decorView as ViewGroup, this)
+            .configureDialog(type, object : TransactDelegate {
+                override fun delegate(transact: Transact) {
+                    refreshTransacts(transact)
+                    list_transacts_add_menu.close(true)
                 }
+            })
     }
 
     private fun refreshTransacts(transact: Transact) {

@@ -23,6 +23,9 @@ class AddTransactDialog(private val viewGroup: ViewGroup,
                         private val context: Context) {
 
     private val viewCreated = createLayout()
+    private val fieldValue = viewCreated.form_transact_value
+    private val fieldDate = viewCreated.form_transact_date
+    private val fieldCategory = viewCreated.form_transact_category
 
     fun configureDialog(type: Type, transactDelegate: TransactDelegate) {
         configureFieldDate()
@@ -30,25 +33,51 @@ class AddTransactDialog(private val viewGroup: ViewGroup,
         configureForm(type, transactDelegate)
     }
 
+    private fun configureFieldDate() {
+        val today = Calendar.getInstance()
+        val year = today.get(Calendar.YEAR)
+        val month = today.get(Calendar.MONTH)
+        val day = today.get(Calendar.DAY_OF_MONTH)
+
+        fieldDate.setText(today.formatToBr())
+
+        // chamando datepicker ao clicar na data
+        fieldDate.setOnClickListener {
+            DatePickerDialog(context,
+                    { _, year, month, dayOfMonth ->
+                        val dateSelected = Calendar.getInstance()
+                        dateSelected.set(year, month, dayOfMonth)
+                        fieldDate
+                                .setText(dateSelected.formatToBr())
+                    }, year, month, day)
+                    .show()
+        }
+    }
+
+    private fun configureFielCategory(type: Type) {
+        val categories = categoriesBy(type)
+
+        val adapter = ArrayAdapter
+                .createFromResource(context,
+                        categories, android.R.layout.simple_spinner_dropdown_item)
+
+        fieldCategory.adapter = adapter
+    }
+
     private fun configureForm(type: Type, transactDelegate: TransactDelegate) {
 
-        val title = if(type == Type.REVENUE) {
-            R.string.adiciona_receita
-        } else {
-            R.string.adiciona_despesa
-        }
+        val title = titleBy(type)
 
         AlertDialog.Builder(context)
                 .setTitle(title)
                 .setView(viewCreated)
                 .setPositiveButton("Add", DialogInterface.OnClickListener
                 { _, _ ->
-                    val valueInText = viewCreated.form_transact_value.text.toString()
-                    val dateInText = viewCreated.form_transact_date.text.toString()
-                    val categoryInText = viewCreated.form_transact_category.selectedItem.toString()
+                    val valueInText = fieldValue.text.toString()
+                    val dateInText = fieldDate.text.toString()
+                    val categoryInText = fieldCategory.selectedItem.toString()
 
                     val value = convertFieldValue(valueInText)
-
                     val date = dateInText.convertToCalendar()
 
                     val transactCreated = Transact(
@@ -64,54 +93,31 @@ class AddTransactDialog(private val viewGroup: ViewGroup,
                 .show()
     }
 
+    private fun createLayout(): View {
+        return LayoutInflater.from(context)
+                .inflate(R.layout.form_transact, viewGroup, false)
+    }
+
     private fun convertFieldValue(valueInText: String): BigDecimal {
         return try {
             BigDecimal(valueInText)
         } catch (exception: NumberFormatException) {
-            Toast.makeText(context,"Falha na conversão de valor", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Falha na conversão de valor", Toast.LENGTH_LONG).show()
             BigDecimal.ZERO
         }
     }
 
-    private fun configureFielCategory(type: Type) {
-
-        val categories = if(type == Type.REVENUE) {
-            R.array.categorias_de_receita
-        } else {
-            R.array.categorias_de_despesa
+    private fun titleBy(type: Type): Int {
+        if (type == Type.REVENUE) {
+            return R.string.adiciona_receita
         }
-
-        val adapter = ArrayAdapter
-                .createFromResource(context,
-                        categories, android.R.layout.simple_spinner_dropdown_item)
-
-        viewCreated.form_transact_category.adapter = adapter
+        return R.string.adiciona_despesa
     }
 
-    private fun configureFieldDate() {
-        val today = Calendar.getInstance()
-
-        val year = today.get(Calendar.YEAR)
-        val month = today.get(Calendar.MONTH)
-        val day = today.get(Calendar.DAY_OF_MONTH)
-
-        viewCreated.form_transact_date.setText(today.formatToBr())
-
-        // chamando datepicker ao clicar na data
-        viewCreated.form_transact_date.setOnClickListener {
-            DatePickerDialog(context,
-                    { _, year, month, dayOfMonth ->
-                        val dateSelected = Calendar.getInstance()
-                        dateSelected.set(year, month, dayOfMonth)
-                        viewCreated.form_transact_date
-                                .setText(dateSelected.formatToBr())
-                    }, year, month, day)
-                    .show()
+    private fun categoriesBy(type: Type): Int {
+        if (type == Type.REVENUE) {
+            return R.array.categorias_de_receita
         }
-    }
-
-    private fun createLayout(): View {
-        return LayoutInflater.from(context)
-                .inflate(R.layout.form_transact, viewGroup, false)
+        return R.array.categorias_de_despesa
     }
 }
