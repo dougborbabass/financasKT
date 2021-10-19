@@ -1,6 +1,7 @@
 package br.com.douglas.financaskt.ui.activity
 
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import br.com.douglas.financaskt.R
@@ -15,10 +16,13 @@ import kotlinx.android.synthetic.main.activity_list_transacts.*
 class ListTransactsActivity : AppCompatActivity() {
 
     private val transacts: MutableList<Transact> = mutableListOf()
+    private var viewOfActivity: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_transacts)
+
+        viewOfActivity = window.decorView
 
         configureResume()
         configureList()
@@ -38,14 +42,18 @@ class ListTransactsActivity : AppCompatActivity() {
     }
 
     private fun callDialogOfAdd(type: Type) {
-        AddTransactDialog(window.decorView as ViewGroup, this)
+        AddTransactDialog(viewOfActivity as ViewGroup, this)
             .configureDialog(type, object : TransactDelegate {
                 override fun delegate(transact: Transact) {
-                    transacts.add(transact)
-                    refreshTransacts()
+                    addTransact(transact)
                     list_transacts_add_menu.close(true)
                 }
             })
+    }
+
+    private fun addTransact(transact: Transact) {
+        transacts.add(transact)
+        refreshTransacts()
     }
 
     private fun refreshTransacts() {
@@ -54,22 +62,31 @@ class ListTransactsActivity : AppCompatActivity() {
     }
 
     private fun configureResume() {
-        val view = window.decorView
-        val resumeView = ResumeView(this, view, transacts)
+        val resumeView = ResumeView(this, viewOfActivity, transacts)
         resumeView.refresh()
     }
 
     private fun configureList() {
-        list_transacts_listview.adapter = ListTrasactsAdapter(transacts, this)
-        list_transacts_listview.setOnItemClickListener { parent, view, position, id ->
-            val transact = transacts[position]
-            ChangeTransactDialog(window.decorView as ViewGroup, this)
-                .configureDialog(transact, object: TransactDelegate {
-                    override fun delegate(transact: Transact) {
-                        transacts[position] = transact
-                        refreshTransacts()
-                    }
-                })
+        with(list_transacts_listview) {
+            adapter = ListTrasactsAdapter(transacts, this@ListTransactsActivity)
+            setOnItemClickListener { _, _, position, _ ->
+                val transact = transacts[position]
+                callDialogChange(transact, position)
+            }
         }
+    }
+
+    private fun callDialogChange(transact: Transact, position: Int) {
+        ChangeTransactDialog(viewOfActivity as ViewGroup, this)
+            .configureDialog(transact, object : TransactDelegate {
+                override fun delegate(transact: Transact) {
+                    changeTransact(transact, position)
+                }
+            })
+    }
+
+    private fun changeTransact(transact: Transact, position: Int) {
+        transacts[position] = transact
+        refreshTransacts()
     }
 }

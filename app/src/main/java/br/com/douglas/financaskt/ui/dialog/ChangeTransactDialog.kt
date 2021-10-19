@@ -81,7 +81,7 @@ class ChangeTransactDialog(private val viewGroup: ViewGroup,
         AlertDialog.Builder(context)
                 .setTitle(title)
                 .setView(viewCreated)
-                .setPositiveButton("Change", DialogInterface.OnClickListener
+                .setPositiveButton("Alterar", DialogInterface.OnClickListener
                 { _, _ ->
                     val valueInText = fieldValue.text.toString()
                     val dateInText = fieldDate.text.toString()

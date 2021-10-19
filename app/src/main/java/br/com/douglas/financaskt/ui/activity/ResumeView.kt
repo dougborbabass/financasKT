@@ -10,9 +10,10 @@ import br.com.douglas.financaskt.model.Transact
 import kotlinx.android.synthetic.main.resume_card.view.*
 import java.math.BigDecimal
 
-class ResumeView(private val context: Context,
-                 private val view: View,
-                 transacts: List<Transact>) {
+class ResumeView(
+    context: Context,
+    private val view: View?,
+    transacts: List<Transact>) {
 
     private val resume: Resume = Resume(transacts)
     private val colorExpanse = ContextCompat.getColor(context, R.color.despesa)
@@ -26,7 +27,7 @@ class ResumeView(private val context: Context,
 
     private fun addRevenueResume() {
         val totalRevenue = resume.revenue()
-        with(view.resume_card_revenue) {
+        with(view!!.resume_card_revenue) {
             setTextColor(colorRevenue)
             text = totalRevenue.formatToBr()
         }
@@ -34,7 +35,7 @@ class ResumeView(private val context: Context,
 
     private fun addExpenseResume() {
         val totalExpense = resume.expense()
-        with(view.resume_card_expense) {
+        with(view!!.resume_card_expense) {
             setTextColor(colorExpanse)
             text = totalExpense.formatToBr()
         }
@@ -43,7 +44,7 @@ class ResumeView(private val context: Context,
     private fun addTotalResume() {
         val total = resume.total()
         val color = colorBy(total)
-        with(view.resume_card_total) {
+        with(view!!.resume_card_total) {
             setTextColor(color)
             text = total.formatToBr()
         }
