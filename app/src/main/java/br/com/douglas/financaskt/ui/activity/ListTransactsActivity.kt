@@ -9,6 +9,7 @@ import br.com.douglas.financaskt.model.Transact
 import br.com.douglas.financaskt.model.Type
 import br.com.douglas.financaskt.ui.adapter.ListTrasactsAdapter
 import br.com.douglas.financaskt.ui.dialog.AddTransactDialog
+import br.com.douglas.financaskt.ui.dialog.ChangeTransactDialog
 import kotlinx.android.synthetic.main.activity_list_transacts.*
 
 class ListTransactsActivity : AppCompatActivity() {
@@ -40,14 +41,14 @@ class ListTransactsActivity : AppCompatActivity() {
         AddTransactDialog(window.decorView as ViewGroup, this)
             .configureDialog(type, object : TransactDelegate {
                 override fun delegate(transact: Transact) {
-                    refreshTransacts(transact)
+                    transacts.add(transact)
+                    refreshTransacts()
                     list_transacts_add_menu.close(true)
                 }
             })
     }
 
-    private fun refreshTransacts(transact: Transact) {
-        transacts.add(transact)
+    private fun refreshTransacts() {
         configureList()
         configureResume()
     }
@@ -60,5 +61,15 @@ class ListTransactsActivity : AppCompatActivity() {
 
     private fun configureList() {
         list_transacts_listview.adapter = ListTrasactsAdapter(transacts, this)
+        list_transacts_listview.setOnItemClickListener { parent, view, position, id ->
+            val transact = transacts[position]
+            ChangeTransactDialog(window.decorView as ViewGroup, this)
+                .configureDialog(transact, object: TransactDelegate {
+                    override fun delegate(transact: Transact) {
+                        transacts[position] = transact
+                        refreshTransacts()
+                    }
+                })
+        }
     }
 }
