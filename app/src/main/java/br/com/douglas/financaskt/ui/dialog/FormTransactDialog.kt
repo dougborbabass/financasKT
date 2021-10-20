@@ -19,11 +19,13 @@ import kotlinx.android.synthetic.main.form_transact.view.*
 import java.math.BigDecimal
 import java.util.*
 
-open class FormTransactDialog(private val context: Context, private val viewGroup: ViewGroup?) {
+abstract class FormTransactDialog(private val context: Context, private val viewGroup: ViewGroup?) {
+
     private val viewCreated = createLayout()
     protected val fieldValue = viewCreated.form_transact_value
     protected val fieldDate = viewCreated.form_transact_date
     protected val fieldCategory = viewCreated.form_transact_category
+    abstract val titleButtonPositive: String
 
     fun configureDialog(type: Type, transactDelegate: TransactDelegate) {
         configureFieldDate()
@@ -73,7 +75,8 @@ open class FormTransactDialog(private val context: Context, private val viewGrou
         AlertDialog.Builder(context)
             .setTitle(title)
             .setView(viewCreated)
-            .setPositiveButton("Add", DialogInterface.OnClickListener
+            .setPositiveButton(
+                titleButtonPositive, DialogInterface.OnClickListener
             { _, _ ->
                 val valueInText = fieldValue.text.toString()
                 val dateInText = fieldDate.text.toString()
@@ -110,12 +113,7 @@ open class FormTransactDialog(private val context: Context, private val viewGrou
         }
     }
 
-    private fun titleBy(type: Type): Int {
-        if (type == Type.REVENUE) {
-            return R.string.adiciona_receita
-        }
-        return R.string.adiciona_despesa
-    }
+    abstract protected fun titleBy(type: Type): Int
 
     protected fun categoriesBy(type: Type): Int {
         if (type == Type.REVENUE) {
