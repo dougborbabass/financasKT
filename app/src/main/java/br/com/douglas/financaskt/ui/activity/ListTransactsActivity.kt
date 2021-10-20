@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.douglas.financaskt.R
+import br.com.douglas.financaskt.dao.TransactDAO
 import br.com.douglas.financaskt.model.Transact
 import br.com.douglas.financaskt.model.Type
 import br.com.douglas.financaskt.ui.adapter.ListTrasactsAdapter
@@ -17,7 +18,8 @@ import kotlinx.android.synthetic.main.activity_list_transacts.*
 
 class ListTransactsActivity : AppCompatActivity() {
 
-    private val transacts: MutableList<Transact> = mutableListOf()
+    private val dao = TransactDAO()
+    private val transacts = dao.transacts
 
     // utilizando o by lazy ele vai inicializar somente quando precisar
     private val viewOfActivity by lazy {
@@ -57,11 +59,6 @@ class ListTransactsActivity : AppCompatActivity() {
             })
     }
 
-    private fun addTransact(transact: Transact) {
-        transacts.add(transact)
-        refreshTransacts()
-    }
-
     private fun refreshTransacts() {
         configureList()
         configureResume()
@@ -96,11 +93,6 @@ class ListTransactsActivity : AppCompatActivity() {
         return super.onContextItemSelected(item)
     }
 
-    private fun remove(position: Int) {
-        transacts.removeAt(position)
-        refreshTransacts()
-    }
-
     private fun callDialogChange(transact: Transact, position: Int) {
         ChangeTransactDialog(viewGroupOfActivity, this)
             .configureDialog(transact, delegate = { transactChanged ->
@@ -108,8 +100,18 @@ class ListTransactsActivity : AppCompatActivity() {
             })
     }
 
+    private fun addTransact(transact: Transact) {
+        dao.add(transact)
+        refreshTransacts()
+    }
+
+    private fun remove(position: Int) {
+        dao.remove(position)
+        refreshTransacts()
+    }
+
     private fun changeTransact(transact: Transact, position: Int) {
-        transacts[position] = transact
+        dao.change(transact, position)
         refreshTransacts()
     }
 }
