@@ -1,7 +1,11 @@
 package br.com.douglas.financaskt.ui.activity
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.douglas.financaskt.R
 import br.com.douglas.financaskt.model.Transact
@@ -75,7 +79,26 @@ class ListTransactsActivity : AppCompatActivity() {
                 val transact = transacts[position]
                 callDialogChange(transact, position)
             }
+
+            setOnCreateContextMenuListener { menu, _, _ ->
+                menu.add(Menu.NONE, 1, Menu.NONE, "Remover")
+            }
         }
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        val idOfMenu = item.itemId
+        if (idOfMenu == 1) {
+            val adapterContextMenuInfo = item.menuInfo as AdapterView.AdapterContextMenuInfo
+            val positionTransact = adapterContextMenuInfo.position
+            remove(positionTransact)
+        }
+        return super.onContextItemSelected(item)
+    }
+
+    private fun remove(position: Int) {
+        transacts.removeAt(position)
+        refreshTransacts()
     }
 
     private fun callDialogChange(transact: Transact, position: Int) {
