@@ -21,9 +21,10 @@ import java.util.*
 
 open class FormTransactDialog(private val context: Context, private val viewGroup: ViewGroup?) {
     private val viewCreated = createLayout()
-    private val fieldValue = viewCreated.form_transact_value
-    private val fieldDate = viewCreated.form_transact_date
-    private val fieldCategory = viewCreated.form_transact_category
+    protected val fieldValue = viewCreated.form_transact_value
+    protected val fieldDate = viewCreated.form_transact_date
+    protected val fieldCategory = viewCreated.form_transact_category
+
     fun configureDialog(type: Type, transactDelegate: TransactDelegate) {
         configureFieldDate()
         configureFielCategory(type)
@@ -116,7 +117,7 @@ open class FormTransactDialog(private val context: Context, private val viewGrou
         return R.string.adiciona_despesa
     }
 
-    private fun categoriesBy(type: Type): Int {
+    protected fun categoriesBy(type: Type): Int {
         if (type == Type.REVENUE) {
             return R.array.categorias_de_receita
         }
