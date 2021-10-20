@@ -1,5 +1,6 @@
 package br.com.douglas.financaskt.ui.dialog
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -8,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import br.com.douglas.financaskt.R
 import br.com.douglas.financaskt.delegate.TransactDelegate
 import br.com.douglas.financaskt.extension.convertToCalendar
@@ -19,27 +19,15 @@ import kotlinx.android.synthetic.main.form_transact.view.*
 import java.math.BigDecimal
 import java.util.*
 
-class ChangeTransactDialog(private val viewGroup: ViewGroup,
-                           private val context: Context) {
-
+open class FormTransactDialog(private val context: Context, private val viewGroup: ViewGroup?) {
     private val viewCreated = createLayout()
     private val fieldValue = viewCreated.form_transact_value
     private val fieldDate = viewCreated.form_transact_date
     private val fieldCategory = viewCreated.form_transact_category
-
-    fun configureDialog(transact: Transact, transactDelegate: TransactDelegate) {
-        val type = transact.type
-
+    fun configureDialog(type: Type, transactDelegate: TransactDelegate) {
         configureFieldDate()
         configureFielCategory(type)
         configureForm(type, transactDelegate)
-
-        fieldValue.setText(transact.value.toString())
-        fieldDate.setText(transact.date.formatToBr())
-
-        val categoriesArray = context.resources.getStringArray(categoriesBy(type))
-        val posCategory = categoriesArray.indexOf(transact.category)
-        fieldCategory.setSelection(posCategory, true)
     }
 
     private fun configureFieldDate() {
@@ -52,14 +40,16 @@ class ChangeTransactDialog(private val viewGroup: ViewGroup,
 
         // chamando datepicker ao clicar na data
         fieldDate.setOnClickListener {
-            DatePickerDialog(context,
-                    { _, year, month, dayOfMonth ->
-                        val dateSelected = Calendar.getInstance()
-                        dateSelected.set(year, month, dayOfMonth)
-                        fieldDate
-                                .setText(dateSelected.formatToBr())
-                    }, year, month, day)
-                    .show()
+            DatePickerDialog(
+                context,
+                { _, year, month, dayOfMonth ->
+                    val dateSelected = Calendar.getInstance()
+                    dateSelected.set(year, month, dayOfMonth)
+                    fieldDate
+                        .setText(dateSelected.formatToBr())
+                }, year, month, day
+            )
+                .show()
         }
     }
 
@@ -67,8 +57,10 @@ class ChangeTransactDialog(private val viewGroup: ViewGroup,
         val categories = categoriesBy(type)
 
         val adapter = ArrayAdapter
-                .createFromResource(context,
-                        categories, android.R.layout.simple_spinner_dropdown_item)
+            .createFromResource(
+                context,
+                categories, android.R.layout.simple_spinner_dropdown_item
+            )
 
         fieldCategory.adapter = adapter
     }
@@ -78,33 +70,34 @@ class ChangeTransactDialog(private val viewGroup: ViewGroup,
         val title = titleBy(type)
 
         AlertDialog.Builder(context)
-                .setTitle(title)
-                .setView(viewCreated)
-                .setPositiveButton("Alterar", DialogInterface.OnClickListener
-                { _, _ ->
-                    val valueInText = fieldValue.text.toString()
-                    val dateInText = fieldDate.text.toString()
-                    val categoryInText = fieldCategory.selectedItem.toString()
+            .setTitle(title)
+            .setView(viewCreated)
+            .setPositiveButton("Add", DialogInterface.OnClickListener
+            { _, _ ->
+                val valueInText = fieldValue.text.toString()
+                val dateInText = fieldDate.text.toString()
+                val categoryInText = fieldCategory.selectedItem.toString()
 
-                    val value = convertFieldValue(valueInText)
-                    val date = dateInText.convertToCalendar()
+                val value = convertFieldValue(valueInText)
+                val date = dateInText.convertToCalendar()
 
-                    val transactCreated = Transact(
-                            type = type,
-                            value = value,
-                            date = date,
-                            category = categoryInText)
+                val transactCreated = Transact(
+                    type = type,
+                    value = value,
+                    date = date,
+                    category = categoryInText
+                )
 
-                    transactDelegate.delegate(transactCreated)
+                transactDelegate.delegate(transactCreated)
 
-                })
-                .setNegativeButton("Cancel", null)
-                .show()
+            })
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun createLayout(): View {
         return LayoutInflater.from(context)
-                .inflate(R.layout.form_transact, viewGroup, false)
+            .inflate(R.layout.form_transact, viewGroup, false)
     }
 
     private fun convertFieldValue(valueInText: String): BigDecimal {
@@ -118,9 +111,9 @@ class ChangeTransactDialog(private val viewGroup: ViewGroup,
 
     private fun titleBy(type: Type): Int {
         if (type == Type.REVENUE) {
-            return R.string.altera_receita
+            return R.string.adiciona_receita
         }
-        return R.string.altera_despesa
+        return R.string.adiciona_despesa
     }
 
     private fun categoriesBy(type: Type): Int {

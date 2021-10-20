@@ -16,13 +16,19 @@ import kotlinx.android.synthetic.main.activity_list_transacts.*
 class ListTransactsActivity : AppCompatActivity() {
 
     private val transacts: MutableList<Transact> = mutableListOf()
-    private lateinit var viewOfActivity: View
+
+    // utilizando o by lazy ele vai inicializar somente quando precisar
+    private val viewOfActivity by lazy {
+        window.decorView
+    }
+
+    private val viewGroupOfActivity by lazy {
+        viewOfActivity as ViewGroup
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_transacts)
-
-        viewOfActivity = window.decorView
 
         configureResume()
         configureList()
@@ -42,7 +48,7 @@ class ListTransactsActivity : AppCompatActivity() {
     }
 
     private fun callDialogOfAdd(type: Type) {
-        AddTransactDialog(viewOfActivity as ViewGroup, this)
+        AddTransactDialog(viewGroupOfActivity, this)
             .configureDialog(type, object : TransactDelegate {
                 override fun delegate(transact: Transact) {
                     addTransact(transact)
@@ -77,7 +83,7 @@ class ListTransactsActivity : AppCompatActivity() {
     }
 
     private fun callDialogChange(transact: Transact, position: Int) {
-        ChangeTransactDialog(viewOfActivity as ViewGroup, this)
+        ChangeTransactDialog(viewGroupOfActivity, this)
             .configureDialog(transact, object : TransactDelegate {
                 override fun delegate(transact: Transact) {
                     changeTransact(transact, position)
