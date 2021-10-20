@@ -14,3 +14,7 @@ Funcionalidades na lista de transações:
 Inicialmente o projeto persiste os dados apenas em uma DAO.
 
 Projeto inicial com fins de estudo de práticas em kotlin
+
+
+
+![Badge](.github/app.gif)
