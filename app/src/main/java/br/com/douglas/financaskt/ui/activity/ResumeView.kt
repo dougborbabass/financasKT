@@ -27,26 +27,32 @@ class ResumeView(
 
     private fun addRevenueResume() {
         val totalRevenue = resume.revenue()
-        with(view!!.resume_card_revenue) {
-            setTextColor(colorRevenue)
-            text = totalRevenue.formatToBr()
+        view?.let {
+            with(it.resume_card_revenue) {
+                setTextColor(colorRevenue)
+                text = totalRevenue.formatToBr()
+            }
         }
     }
 
     private fun addExpenseResume() {
         val totalExpense = resume.expense()
-        with(view!!.resume_card_expense) {
-            setTextColor(colorExpanse)
-            text = totalExpense.formatToBr()
+        view?.let {
+            with(it.resume_card_expense) {
+                setTextColor(colorExpanse)
+                text = totalExpense.formatToBr()
+            }
         }
     }
 
     private fun addTotalResume() {
         val total = resume.total()
         val color = colorBy(total)
-        with(view!!.resume_card_total) {
-            setTextColor(color)
-            text = total.formatToBr()
+        view?.let{
+            with(it.resume_card_total) {
+                setTextColor(color)
+                text = total.formatToBr()
+            }
         }
     }
 
