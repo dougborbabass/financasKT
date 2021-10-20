@@ -12,8 +12,9 @@ import java.math.BigDecimal
 
 class ResumeView(
     context: Context,
-    private val view: View?,
-    transacts: List<Transact>) {
+    private val view: View,
+    transacts: List<Transact>
+) {
 
     private val resume: Resume = Resume(transacts)
     private val colorExpanse = ContextCompat.getColor(context, R.color.despesa)
@@ -27,32 +28,28 @@ class ResumeView(
 
     private fun addRevenueResume() {
         val totalRevenue = resume.revenue()
-        view?.let {
-            with(it.resume_card_revenue) {
-                setTextColor(colorRevenue)
-                text = totalRevenue.formatToBr()
-            }
+        with(view.resume_card_revenue) {
+            setTextColor(colorRevenue)
+            text = totalRevenue.formatToBr()
+
         }
     }
 
     private fun addExpenseResume() {
         val totalExpense = resume.expense()
-        view?.let {
-            with(it.resume_card_expense) {
-                setTextColor(colorExpanse)
-                text = totalExpense.formatToBr()
-            }
+        with(view.resume_card_expense) {
+            setTextColor(colorExpanse)
+            text = totalExpense.formatToBr()
         }
+
     }
 
     private fun addTotalResume() {
         val total = resume.total()
         val color = colorBy(total)
-        view?.let{
-            with(it.resume_card_total) {
-                setTextColor(color)
-                text = total.formatToBr()
-            }
+        with(view.resume_card_total) {
+            setTextColor(color)
+            text = total.formatToBr()
         }
     }
 

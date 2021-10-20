@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_list_transacts.*
 class ListTransactsActivity : AppCompatActivity() {
 
     private val transacts: MutableList<Transact> = mutableListOf()
-    private var viewOfActivity: View? = null
+    private lateinit var viewOfActivity: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
