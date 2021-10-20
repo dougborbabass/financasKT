@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import br.com.douglas.financaskt.R
-import br.com.douglas.financaskt.delegate.TransactDelegate
 import br.com.douglas.financaskt.extension.convertToCalendar
 import br.com.douglas.financaskt.extension.formatToBr
 import br.com.douglas.financaskt.model.Transact
@@ -27,10 +26,41 @@ abstract class FormTransactDialog(private val context: Context, private val view
     protected val fieldCategory = viewCreated.form_transact_category
     abstract val titleButtonPositive: String
 
-    fun configureDialog(type: Type, transactDelegate: TransactDelegate) {
+    fun configureDialog(type: Type, delegate: (transact: Transact) -> Unit) {
         configureFieldDate()
         configureFielCategory(type)
-        configureForm(type, transactDelegate)
+        configureForm(type, delegate)
+    }
+
+    private fun configureForm(type: Type, delegate: (transact: Transact) -> Unit) {
+
+        val title = titleBy(type)
+
+        AlertDialog.Builder(context)
+            .setTitle(title)
+            .setView(viewCreated)
+            .setPositiveButton(
+                titleButtonPositive, DialogInterface.OnClickListener
+                { _, _ ->
+                    val valueInText = fieldValue.text.toString()
+                    val dateInText = fieldDate.text.toString()
+                    val categoryInText = fieldCategory.selectedItem.toString()
+
+                    val value = convertFieldValue(valueInText)
+                    val date = dateInText.convertToCalendar()
+
+                    val transactCreated = Transact(
+                        type = type,
+                        value = value,
+                        date = date,
+                        category = categoryInText
+                    )
+
+                    delegate(transactCreated)
+
+                })
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun configureFieldDate() {
@@ -66,37 +96,6 @@ abstract class FormTransactDialog(private val context: Context, private val view
             )
 
         fieldCategory.adapter = adapter
-    }
-
-    private fun configureForm(type: Type, transactDelegate: TransactDelegate) {
-
-        val title = titleBy(type)
-
-        AlertDialog.Builder(context)
-            .setTitle(title)
-            .setView(viewCreated)
-            .setPositiveButton(
-                titleButtonPositive, DialogInterface.OnClickListener
-            { _, _ ->
-                val valueInText = fieldValue.text.toString()
-                val dateInText = fieldDate.text.toString()
-                val categoryInText = fieldCategory.selectedItem.toString()
-
-                val value = convertFieldValue(valueInText)
-                val date = dateInText.convertToCalendar()
-
-                val transactCreated = Transact(
-                    type = type,
-                    value = value,
-                    date = date,
-                    category = categoryInText
-                )
-
-                transactDelegate.delegate(transactCreated)
-
-            })
-            .setNegativeButton("Cancel", null)
-            .show()
     }
 
     private fun createLayout(): View {

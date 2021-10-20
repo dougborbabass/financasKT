@@ -1,7 +1,7 @@
 package br.com.douglas.financaskt.model
 
 import java.math.BigDecimal
-import java.util.Calendar
+import java.util.*
 
 class Transact(val value: BigDecimal,
                val category: String = "Others",

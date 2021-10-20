@@ -8,7 +8,6 @@ import android.widget.BaseAdapter
 import androidx.core.content.ContextCompat
 import br.com.douglas.financaskt.R
 import br.com.douglas.financaskt.extension.formatToBr
-import br.com.douglas.financaskt.extension.formatToBr
 import br.com.douglas.financaskt.model.Transact
 import br.com.douglas.financaskt.model.Type
 import kotlinx.android.synthetic.main.transact_item.view.*

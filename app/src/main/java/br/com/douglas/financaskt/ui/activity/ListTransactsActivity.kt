@@ -1,11 +1,9 @@
 package br.com.douglas.financaskt.ui.activity
 
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import br.com.douglas.financaskt.R
-import br.com.douglas.financaskt.delegate.TransactDelegate
 import br.com.douglas.financaskt.model.Transact
 import br.com.douglas.financaskt.model.Type
 import br.com.douglas.financaskt.ui.adapter.ListTrasactsAdapter
@@ -49,11 +47,9 @@ class ListTransactsActivity : AppCompatActivity() {
 
     private fun callDialogOfAdd(type: Type) {
         AddTransactDialog(viewGroupOfActivity, this)
-            .configureDialog(type, object : TransactDelegate {
-                override fun delegate(transact: Transact) {
-                    addTransact(transact)
-                    list_transacts_add_menu.close(true)
-                }
+            .configureDialog(type, delegate = { transactCreated ->
+                addTransact(transactCreated)
+                list_transacts_add_menu.close(true)
             })
     }
 
@@ -84,10 +80,8 @@ class ListTransactsActivity : AppCompatActivity() {
 
     private fun callDialogChange(transact: Transact, position: Int) {
         ChangeTransactDialog(viewGroupOfActivity, this)
-            .configureDialog(transact, object : TransactDelegate {
-                override fun delegate(transact: Transact) {
-                    changeTransact(transact, position)
-                }
+            .configureDialog(transact, delegate = { transactChanged ->
+                changeTransact(transactChanged, position)
             })
     }
 

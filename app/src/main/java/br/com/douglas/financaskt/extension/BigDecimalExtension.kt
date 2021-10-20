@@ -2,7 +2,7 @@ package br.com.douglas.financaskt.extension
 
 import java.math.BigDecimal
 import java.text.DecimalFormat
-import java.util.Locale
+import java.util.*
 
 fun BigDecimal.formatToBr() : String {
     val instanceBR = DecimalFormat.getCurrencyInstance(Locale("pt", "br"))

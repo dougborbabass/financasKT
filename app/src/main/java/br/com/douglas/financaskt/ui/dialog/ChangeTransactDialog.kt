@@ -3,7 +3,6 @@ package br.com.douglas.financaskt.ui.dialog
 import android.content.Context
 import android.view.ViewGroup
 import br.com.douglas.financaskt.R
-import br.com.douglas.financaskt.delegate.TransactDelegate
 import br.com.douglas.financaskt.extension.formatToBr
 import br.com.douglas.financaskt.model.Transact
 import br.com.douglas.financaskt.model.Type
@@ -16,9 +15,9 @@ class ChangeTransactDialog(
     override val titleButtonPositive: String
         get() = "Alterar"
 
-    fun configureDialog(transact: Transact, transactDelegate: TransactDelegate) {
+    fun configureDialog(transact: Transact, delegate: (transact: Transact) -> Unit) {
         val type = transact.type
-        super.configureDialog(type, transactDelegate)
+        super.configureDialog(type, delegate)
         initFields(transact)
     }
 
